@@ -646,7 +646,7 @@ $$(document).on('click', '[data-page="myorder"] a#custnew', function() {
     // save
     window.localStorage.setItem('myReceiveNew', JSON.stringify({
         __timestamp__: Date.now(),
-        params
+        params: params
     }));
     // get customer new receive info
     getJSON('myReceiveNew', Object.assign({
@@ -1035,7 +1035,7 @@ myApp.onPageInit('myinfo', function(page) {
 $$(document).on('click', '[data-page="myinfo"] a[id="custidused"]', function() {
     var in_id = $$('[data-page="myinfo"] input[name="custid"]').val();
     if(in_id.length < 4) return false;
-    getJSON('myInfoId', { in_id }, function(data) {
+    getJSON('myInfoId', { in_id: in_id }, function(data) {
         if(data[0].f_id == in_id) {
             myApp.alert('사용 가능한 아이디 입니다');
         } else {
@@ -1925,8 +1925,8 @@ function isEmail(data) {
 
 function getCommon(in_gbn, in_sub_gbn, successCallback) {
     getJSON('common', {
-        in_gbn,
-        in_sub_gbn
+        in_gbn: in_gbn,
+        in_sub_gbn: in_sub_gbn
     }, function(data) {
         // setting
         if(typeof successCallback === 'function') {
@@ -2027,7 +2027,7 @@ function appInitialize() {
                 }));
             }
             getJSON('dong', {
-                in_create_dttm
+                in_create_dttm: in_create_dttm
             }, function(data) {
                 if(data.length > 0) {
                     DONG_INFO.itemData = data;
