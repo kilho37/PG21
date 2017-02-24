@@ -592,6 +592,7 @@ $$(document).on('click', '[data-page="myorder"] a#custnew', function() {
         if(el.attr('type') == 'checkbox') {
             params[key] = el.prop('checked') ? 'Y' : 'N';
         } else if(this.tagName.toLowerCase() == 'select') {
+            title = el.data('title');
             params[key] = el.val();
             if(isArray(params[key])) {
                 params[key] = params[key].join(', ');
@@ -601,7 +602,9 @@ $$(document).on('click', '[data-page="myorder"] a#custnew', function() {
         }
         category = $$('[data-page="myorder"] a[href="#myorder-' + tab + '"]').text();
         if(required) {
-            if((params.in_doc_subal_gbn != '퀵' && params.in_doc_subal_gbn != '화물') && custtab == 'custtab2_') { 
+            if(custtab == 'custtab2_' 
+                && params.in_site_type_gbn == 'BD' 
+                && (params.in_doc_subal_gbn != '퀵' && params.in_doc_subal_gbn != '화물')) { 
                 // 퀵&&화물(일반)이 아니면 도착지 정보는 필수체크 제외됨
             } else {
                 params.title[key] = '[' + category + '] 의 ' + ' <b style="color: red;">' + title + '</b>';
@@ -611,10 +614,15 @@ $$(document).on('click', '[data-page="myorder"] a#custnew', function() {
     // 2차 확인
     Object.keys(params).find(function(key) {
         switch(key) {
-            case 'in_car_type':
+            case 'in_car_type': // 배송수단
                 if(params[key] != '밴' && params[key] != '트럭') {
                     params['in_car_sub_type1'] = '';
                     params['in_car_sub_type2'] = '';
+                }
+                break;
+            case 'custtab3_reserve_yn': // 예약설정
+                if(params[key] != 'Y') {
+                    params['in_reserve_dttm'] = '';
                 }
                 break;
         }
@@ -623,9 +631,10 @@ $$(document).on('click', '[data-page="myorder"] a#custnew', function() {
     var invalid_key = Object.keys(params).find(function(key) {
         return params.title[key] !== undefined && params[key].trim().length < 1;
     });
+    console.log(params);
     if(invalid_key !== undefined) {
         myApp.modal({
-            title: '주문하기',
+            title: PAGE_INFO.myorderPageInfo.pageTitle,
             text: '해당 ' + params.title[invalid_key] + ' 항목은 <b style="color: red;">필수항목</b> 입니다.',
             buttons: [{ text: 'OK', onClick: function() {} }]
         });
