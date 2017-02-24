@@ -300,6 +300,19 @@ myApp.onPageInit('myorder', function(page) {
     // 툴바 설정
     html = PAGE_INFO.myorderPageTemplate.myOrderToolbarTemplate();
     $$('[data-page="myorder"] .toolbar.toolbar-bottom > .toolbar-inner').html(html);
+    // '사내' => 요금구분/배송수단/운행형태/탁송경유/운행구분 숨김처리
+    $$('[data-page="myorder"] div[id="myorder-tab3"] .list-block a[href="#"]').each(function() {
+        var title = $$(this).find('.item-title').text();
+        switch(title) {
+            case '요금구분':
+            case '배송수단':
+            case '운행형태':
+            case '탁송경유':
+            case '운행구분':
+                $$(this).parent().hide();
+                break;
+        }
+    });
     // 이전|다음 호출
     setToolbarBottomNames();
     // favorite saerch
@@ -462,9 +475,9 @@ $$(document).on('click', '[data-page="myorder"] div#myorder-tab0 a.item-link', f
                     case '오토': // 여기서 한번만 실행하도록...,
                         el.prop('selected', true);
                         options.parent().next().find('.item-after').text(el.attr('value'));
-                        break;
                     default: 
                         el.prop('disabled', false);
+                        break;
                 }
             });
         } else if(code == '화물') {
