@@ -146,7 +146,8 @@ Template7.registerHelper('formatFullAddress', function(context) {
     var rvalue = '';
     if(!isObject(context)) return rvalue;
     if('f_sido' in context) {
-        return `${context.f_sido} ${context.f_gugun} ${context.f_dong} ${context.f_dong_num}`;
+        // return `${context.f_sido} ${context.f_gugun} ${context.f_dong} ${context.f_dong_num}`;
+        return context.f_sido + ' ' + context.f_gugun + ' ' + context.f_dong + ' ' + context.f_dong_num;
     }
     return rvalue;
 });
@@ -263,8 +264,10 @@ myApp.onPageBeforeInit('myorder', function(page) {
         }
         PAGE_INFO.myorderPageInfo.toolbarBottomNames.push(name); // 이전|다음 이름설정
         var active = index == 1 ? ' active' : '';
-        tabbar.append(`<a href="#myorder-tab${index}" class="tab-link${active}">${name}</a>`);
-        tabs.append(`<div id="myorder-tab${index}" class="page-content tab${active}" style="padding-top: 36px;"></div>`);        
+        // tabbar.append(`<a href="#myorder-tab${index}" class="tab-link${active}">${name}</a>`);
+        tabbar.append('<a href="#myorder-tab' + index + '" class="tab-link' + active + '">' + name + '</a>');
+        // tabs.append(`<div id="myorder-tab${index}" class="page-content tab${active}" style="padding-top: 36px;"></div>`);        
+        tabs.append('<div id="myorder-tab' + index + '" class="page-content tab' + active + '" style="padding-top: 36px;"></div>');        
     });
     // 템플릿 내용 설정
     if(PAGE_INFO.myorderPageInfo.in_site_type_gbn == 'BD') {
@@ -836,7 +839,8 @@ $$(document).on('click', '.popup-order-detail a[id="custmyreorder"]', function()
             return rnum != undefined && data.f_num == rnum;
         }));
         // 예약문제 및 접수/종료시에만 가능한지?...,
-        myApp.alert(`[원본: ${rnum}] 가상으로만 배송신청 처리되었습니다.`);
+        // myApp.alert(`[원본: ${rnum}] 가상으로만 배송신청 처리되었습니다.`);
+        myApp.alert('[원본: ' + rnum + '] 가상으로만 배송신청 처리되었습니다.');
         //if(isObject(rdata) && rdata.f_status) {
         //}
         // get customer new receive info
@@ -898,9 +902,10 @@ function getMyList(params, pullToRefresh) {
             $$('[data-page="mylist"] .page-mylist-template-content').html(html);
             $$('[data-page="mylist"] .page-content').scrollTop(0, 200);
             // myApp[data.length > 0 ? 'showToolbar' : 'hideToolbar']('[data-page="mylist"] .toolbar-bottom');
-            $$('[data-page="mylist"] div[id="my-list-paging-info"]').html(`
-                <span>${params.in_page} / ${params.in_total_pages}</span>
-            `);
+            // $$('[data-page="mylist"] div[id="my-list-paging-info"]').html(`
+            //     <span>${params.in_page} / ${params.in_total_pages}</span>
+            // `);
+            $$('[data-page="mylist"] div[id="my-list-paging-info"]').html('<span>' + params.in_page + ' / ' + params.in_total_pages + '</span>');
             // 버그? 높이 맞추기
             var pageEl = $$('[data-page="mylist"] .page-content');
             pageEl.eq(1).css('height', pageEl.eq(0).height() + $$('[data-page="mylist"] .searchbar').height() + 'px');
@@ -1350,7 +1355,8 @@ $$(document).on('click', '[data-page="uselist"] li .item-content', function() {
 $$(document).on('click', '.modal-action-contact', function() {
     myApp.actions(CONTACT_INFO.map(function(contact) {
         return {
-            text: `<div style="text-align: center;">${contact.title}</div>`,
+            // text: `<div style="text-align: center;">${contact.title}</div>`,
+            text: '<div style="text-align: center;">' + contact.title + '</div>',
             bold: true,
             onClick: callNumber.bind(null, contact.callNumber)
         }
@@ -1496,12 +1502,12 @@ $$(document).on('click', '.panel.panel-left a[name="exitapp"]', function() {
 });
 
 // Global variables
-const APP_INFO = {
+var APP_INFO = {
     code: '1b7c7f59-d812-c0ec-4be0-94db79aec6bd',
     version: '1.0.2'
 };
 
-const MENU_INFO = [{ // 기본메뉴 구조
+var MENU_INFO = [{ // 기본메뉴 구조
         href: 'myorder.html',
         class: 'link',
         icon: 'icons/pages.png',
@@ -1532,7 +1538,7 @@ const MENU_INFO = [{ // 기본메뉴 구조
 var COMMON_INFO; // 공통코드
 var AUTOCOMPLETES = []; // 자동완성기능 컴포넌트
 
-const CONTACT_INFO = [ // 문의정보
+var CONTACT_INFO = [ // 문의정보
     {
         title: '요금문의',
         showNumber: '1800-8280',
@@ -1552,7 +1558,7 @@ const CONTACT_INFO = [ // 문의정보
     }
 ];
 
-const CUST_INFO = { // 고객정보
+var CUST_INFO = { // 고객정보
     // ajax
     baseURL: 'http://115.68.29.179/pq21/service/mobile_cust/',
     baseSuffix: '.php',
@@ -1582,7 +1588,7 @@ const CUST_INFO = { // 고객정보
     callcenterNumber: '18008280'
 }
 
-const DONG_INFO = { // 주소캐쉬
+var DONG_INFO = { // 주소캐쉬
     // address dong cache
     itemKey: 'dongcache',
     itemData: undefined,
@@ -1590,7 +1596,7 @@ const DONG_INFO = { // 주소캐쉬
     itemMatchRx: /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/
 }
 
-const PAGE_INFO = { // 페이지 정보
+var PAGE_INFO = { // 페이지 정보
     // data-page="index"
     indexPageTemplate: undefined,
     // data-page="myorder"
@@ -1645,7 +1651,8 @@ function getFavoriteAutoComplete(params) {
                 autocomplete.hidePreloader();
                 data.forEach(function(favorite, index) {
                     favorite.f_num = index;
-                    favorite.f_text = `${favorite.f_name} ${favorite.f_person_name}<br>${favorite.f_full_addr}`;
+                    // favorite.f_text = `${favorite.f_name} ${favorite.f_person_name}<br>${favorite.f_full_addr}`;
+                    favorite.f_text = favorite.f_name + ' ' + favorite.f_person_name+ '<br>' + favorite.f_full_addr;
                     results.push(favorite);
                 });
                 render(results);
@@ -1695,9 +1702,11 @@ function getNameAutoComplete(params) {
             }, function(data) {
                 autocomplete.hidePreloader();
                 data.forEach(function(name) {
-                    var text = `${name.f_person_name} ${name.f_hphone}`;
+                    // var text = `${name.f_person_name} ${name.f_hphone}`;
+                    var text = name.f_person_name + ' ' + name.f_hphone;
                     if(name.f_name && name.f_name.length > 0) text += ' ' + name.f_name;
-                    name.f_text = text + `<br>${name.f_full_addr}`;
+                    // name.f_text = text + `<br>${name.f_full_addr}`;
+                    name.f_text = text + '<br>' + name.f_full_addr;
                     results.push(name);
                 });
                 render(results);
@@ -1750,7 +1759,8 @@ function getGroupNumAutoComplete(params) {
                 autocomplete.hidePreloader();
                 // results = PAGE_INFO.myinfoPageInfo.value.slice(0);
                 data.forEach(function(group) {
-                    group.f_text = `${group.f_name} (${group.f_full_addr})`;
+                    // group.f_text = `${group.f_name} (${group.f_full_addr})`;
+                    group.f_text = group.f_name + ' (' + group.f_full_addr + ')';
                     results.push(group);
                 });
                 render(results);
@@ -2079,16 +2089,25 @@ function appInitialize() {
             var contactEl = $$('.panel.panel-left').find('ul[id="contact-list"]');
             contactEl.empty();
             CONTACT_INFO.forEach(function(contact) {
-                contactEl.append(`
-                <li>
-                    <a href="#" class="item-content item-link close-panel" data-callnumber="${contact.callNumber}">
-                    <div class="item-inner">
-                        <div class="item-title">${contact.title}</div>
-                        <div class="item-after">${contact.showNumber}</div>
-                    </div>
-                    </a>
-                </li>`
-                );
+                // contactEl.append(`
+                // <li>
+                //     <a href="#" class="item-content item-link close-panel" data-callnumber="${contact.callNumber}">
+                //     <div class="item-inner">
+                //         <div class="item-title">${contact.title}</div>
+                //         <div class="item-after">${contact.showNumber}</div>
+                //     </div>
+                //     </a>
+                // </li>`
+                // );
+                var html = '<li>';
+                html += '<a href="#" class="item-content item-link close-panel" data-callnumber="' + contact.callNumber + '">';
+                html += '<div class="item-inner">';
+                html += 'div class="item-title">' + contact.title + '</div>';
+                html += '<div class="item-after">' + contact.showNumber + '</div>';
+                html += '</div>';
+                html += '</a>';
+                html += '/<li>';
+                contactEl.append(html);
             });
             callback(null, 'contact success...,');
         },
