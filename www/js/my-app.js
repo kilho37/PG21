@@ -235,11 +235,12 @@ $$(document).on('click', '[data-page="index"] a[id="menu-cc"]', function() {
 
 // data-page="myorder"
 myApp.onPageBeforeInit('myorder', function(page) {
+    var in_site_type_gbn = page.query.site_type_gbn || 'NR';
     PAGE_INFO.myorderPageInfo = Object.assign({}, page, {
         toolbarBottomNames: [], // 이전|다음 이름배열
-        in_site_type_gbn: page.query.site_type_gbn || 'NR', // 기본값
-        in_site_type_func: this.in_site_type_gbn == 'BD' ? 'BD01' : 'NR01', // 기본값
-        pageTitle: this.in_site_type_gbn == 'BD' ? '문서수발' : '주문하기'
+        in_site_type_gbn, // 기본값
+        in_site_type_func: in_site_type_gbn == 'BD' ? 'BD01' : 'NR01', // 기본값
+        pageTitle: in_site_type_gbn == 'BD' ? '문서수발' : '주문하기'
     });
     if(!isObject(PAGE_INFO.myorderPageTemplate)) {
         PAGE_INFO.myorderPageTemplate = {
@@ -289,6 +290,9 @@ myApp.onPageBeforeInit('myorder', function(page) {
 });
 
 myApp.onPageInit('myorder', function(page) {
+    // 제목 설정
+    $$('[data-page="myorder"] .navbar .navbar-inner div.center').eq(1).text(PAGE_INFO.myorderPageInfo.pageTitle);
+    // 탭 내용 설정
     var html = PAGE_INFO.myorderPageTemplate.myOrder1Template(CUST_INFO.itemData);
     $$('[data-page="myorder"] div#myorder-tab1').html(html); // 출발지
     html = PAGE_INFO.myorderPageTemplate.myOrder2Template({});
@@ -301,7 +305,9 @@ myApp.onPageInit('myorder', function(page) {
     html = PAGE_INFO.myorderPageTemplate.myOrderToolbarTemplate();
     $$('[data-page="myorder"] .toolbar.toolbar-bottom > .toolbar-inner').html(html);
     // '사내' => 요금구분/배송수단/운행형태/탁송경유/운행구분 숨김처리
-    $$('[data-page="myorder"] div[id="myorder-tab3"] .list-block li.doc-subal-not-item').hide();
+    if(PAGE_INFO.myorderPageInfo.in_site_type_gbn == 'BD') {
+        $$('[data-page="myorder"] div[id="myorder-tab3"] .list-block li.doc-subal-not-item').hide();
+    }
     // 이전|다음 호출
     setToolbarBottomNames();
     // favorite saerch
@@ -1896,7 +1902,7 @@ function isArray(data) {
 
 function isEmail(data) {
     var emailMatchRx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    return emailMatchRx.test(data);
+    return emailMatchRx.test(data.trim());
 }
 
 function getCommon(in_gbn, in_sub_gbn, successCallback) {
