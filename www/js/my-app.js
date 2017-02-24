@@ -2105,7 +2105,7 @@ function appInitialize() {
                 html += '<div class="item-after">' + contact.showNumber + '</div>';
                 html += '</div>';
                 html += '</a>';
-                html += '/<li>';
+                html += '</li>';
                 contactEl.append(html);
             });
             callback(null, 'contact success...,');
