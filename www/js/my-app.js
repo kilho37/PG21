@@ -634,7 +634,6 @@ $$(document).on('click', '[data-page="myorder"] a#custnew', function() {
     var invalid_key = Object.keys(params).find(function(key) {
         return params.title[key] !== undefined && params[key].trim().length < 1;
     });
-    console.log(params);
     if(invalid_key !== undefined) {
         myApp.modal({
             title: PAGE_INFO.myorderPageInfo.pageTitle,
@@ -2102,7 +2101,7 @@ function appInitialize() {
                 var html = '<li>';
                 html += '<a href="#" class="item-content item-link close-panel" data-callnumber="' + contact.callNumber + '">';
                 html += '<div class="item-inner">';
-                html += 'div class="item-title">' + contact.title + '</div>';
+                html += '<div class="item-title">' + contact.title + '</div>';
                 html += '<div class="item-after">' + contact.showNumber + '</div>';
                 html += '</div>';
                 html += '</a>';
