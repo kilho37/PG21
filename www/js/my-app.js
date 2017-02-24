@@ -239,7 +239,7 @@ myApp.onPageBeforeInit('myorder', function(page) {
     var in_site_type_gbn = page.query.site_type_gbn || 'NR';
     PAGE_INFO.myorderPageInfo = Object.assign({}, page, {
         toolbarBottomNames: [], // 이전|다음 이름배열
-        in_site_type_gbn, // 기본값
+        in_site_type_gbn: in_site_type_gbn, // 기본값
         in_site_type_func: in_site_type_gbn == 'BD' ? 'BD01' : 'NR01', // 기본값
         pageTitle: in_site_type_gbn == 'BD' ? '문서수발' : '주문하기'
     });
@@ -1149,7 +1149,7 @@ $$(document).on('click', '[data-page="ifind"] a[id="custidused"]', function() {
     var in_num = $$('[data-page="ifind"] input[name="custnum"]').val();
     var in_id = $$('[data-page="ifind"] input[name="custid"]').val();
     if(in_id.length < 4) return false;
-    getJSON('myInfoId', { in_id, in_num }, function(data) {
+    getJSON('myInfoId', { in_id: in_id, in_num: in_num }, function(data) {
         if(data[0].f_id == in_id) {
             myApp.alert('사용 가능한 아이디 입니다');
         } else {
@@ -1197,7 +1197,7 @@ $$(document).on('click', '[data-page="ifind"] a#custrenew', function() {
     }
 
     // get customer info
-    getJSON('myInfoRenew', { in_num, in_id, in_pw, 
+    getJSON('myInfoRenew', { in_num: in_num, in_id: in_id, in_pw: in_pw, 
         in_number: CUST_INFO.phoneNumber // log
     }, function(data) {
         // setting
@@ -1422,7 +1422,7 @@ $$(document).on('click', '[data-page="login"] a#custlog', function() {
     }*/
 
     // get customer info
-    getJSON('login', { in_id, in_pw, 
+    getJSON('login', { in_id: in_id, in_pw: in_pw, 
         in_number: CUST_INFO.phoneNumber // log
     }, function(data) {
         // setting
