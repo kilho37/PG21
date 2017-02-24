@@ -301,18 +301,7 @@ myApp.onPageInit('myorder', function(page) {
     html = PAGE_INFO.myorderPageTemplate.myOrderToolbarTemplate();
     $$('[data-page="myorder"] .toolbar.toolbar-bottom > .toolbar-inner').html(html);
     // '사내' => 요금구분/배송수단/운행형태/탁송경유/운행구분 숨김처리
-    $$('[data-page="myorder"] div[id="myorder-tab3"] .list-block a[href="#"]').each(function() {
-        var title = $$(this).find('.item-title').text();
-        switch(title) {
-            case '요금구분':
-            case '배송수단':
-            case '운행형태':
-            case '탁송경유':
-            case '운행구분':
-                $$(this).parent().hide();
-                break;
-        }
-    });
+    $$('[data-page="myorder"] div[id="myorder-tab3"] .list-block li.doc-subal-not-item').hide();
     // 이전|다음 호출
     setToolbarBottomNames();
     // favorite saerch
@@ -466,6 +455,7 @@ $$(document).on('click', '[data-page="myorder"] div#myorder-tab0 a.item-link', f
             myApp.showTab('#myorder-tab1'); // 출발지
         }
         // 화물이면 차량수단에서는 차량에 해당하는 항목만 표시하도록...,
+        $$('[data-page="myorder"] div[id="myorder-tab3"] .list-block li.doc-subal-not-item').hide();
         var tab3Item = true;
         if(code == '퀵') {
             var options = $$('[data-page="myorder"] select[name="custtab3_car_type"]').find('option');
