@@ -1835,10 +1835,9 @@ function getJSON(url, params, successCallback, errorCallback) {
     if(CUST_INFO.indicator) myApp.showIndicator();
     if(!CUST_INFO.networkLineStatus) { // 네트워크 연결상태가 바른지 확인
         myApp.hideIndicator();
-        console.log('네트워크 연결상태를 확인하시기 바랍니다.')
-        myApp.alert('네트워크 연결상태를 확인하시기 바랍니다.');
+        // myApp.alert('네트워크 연결상태를 확인하시기 바랍니다.');
         if(typeof errorCallback === 'function') errorCallback();
-        // return false;
+        return false;
     }
     setTimeout(function() {
         var config = Object.assign({}, {
@@ -2165,6 +2164,6 @@ function appInitialize() {
         CUST_INFO.init = false;
         CUST_INFO.indicator = true;
         if(err) console.log(err);
-        console.log(results);
+        // console.log(results);
     })
 }
